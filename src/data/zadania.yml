@@ -1,0 +1,562 @@
+# Baza zadań: gęstość, masa, objętość, ciężar i wyporność.
+#
+# Format zadania:
+#   id:          unikalny identyfikator (bez spacji)
+#   title:       tytuł
+#   tags:        kategorie do filtrowania (masa, objętość, gęstość, ciężar, wyporność, łódź, przekształcenia)
+#   lore:        archimedes | dysk | zwykłe
+#   bonus:       dodatkowe punkty za całe zadanie (za klimat, nie za trudność)
+#   bonusReason: za co ten bonus
+#   story:       historyjka (Markdown + TeX: $...$ w tekście, $$...$$ osobno)
+#   parts:       lista podpunktów:
+#     question:  treść pytania (Markdown + TeX)
+#     answer:    { quantity: mass|volume|density|force, value: liczba, unit: jednostka }
+#                jednostki: g, kg | cm3, dm3, m3 | g/cm3, kg/dm3, kg/m3 | N, kN
+#                Użytkownik może odpowiedzieć w dowolnej jednostce danej wielkości,
+#                aplikacja sama przelicza.
+#     tolerance: względna tolerancja (domyślnie 0.01 = 1%)
+#     points:    punkty za podpunkt (domyślnie 1)
+#     hint:      wskazówka
+#     solution:  rozwiązanie
+#   epilogue:    ciekawostka pokazywana po rozwiązaniu wszystkich podpunktów
+#
+# Przyjmujemy g = 10 m/s², czyli 1 kg waży 10 N. Woda (słodka): 1 g/cm³ = 1 kg/dm³ = 1000 kg/m³.
+
+title: "Eureka! (czyli dajcie mi ręcznik)"
+intro: |
+  Zbiór zadań o **gęstości**, **masie**, **objętości**, **ciężarze** i **wyporności**.
+  Odpowiedź podajesz w wybranej jednostce. Każda poprawna jednostka jest dobra,
+  ale musisz umieć przeliczyć. Kalkulator wolno, ręcznik zalecany.
+
+  $$\rho = \frac{m}{V} \qquad m = \rho \cdot V \qquad V = \frac{m}{\rho} \qquad F_g = m \cdot g \qquad F_w = \rho_{cieczy} \cdot g \cdot V_{zanurzona}$$
+
+  Przyjmujemy $g = 10\ \tfrac{\text{m}}{\text{s}^2}$ oraz $\rho_{wody} = 1\ \tfrac{\text{g}}{\text{cm}^3}$.
+
+tasks:
+  # ─────────────────────────────── ARCHIMEDES ───────────────────────────────
+  - id: korona-hierona
+    title: "Korona króla Hierona"
+    tags: [gęstość, objętość, przekształcenia]
+    lore: archimedes
+    bonus: 3
+    bonusReason: "Za Archimedesa, golasa i najsłynniejszy okrzyk w historii nauki."
+    story: |
+      **Syrakuzy, III wiek p.n.e.** Król Hieron II zamówił u złotnika koronę ze
+      szczerego złota. Złotnik koronę oddał, waga się zgadzała, ale król i tak miał
+      przeczucie, że ktoś go zrobił w konia i dosypał srebra. Rozwalić korony nie
+      wolno, bo to wotum dla bogów, a bogowie nie lubią reklamacji.
+
+      Sprawę dostaje **Archimedes**. Długo nie wie, co zrobić, aż wchodzi do pełnej
+      wanny i woda wylewa się na podłogę. Archimedes wyskakuje na ulicę, krzycząc
+      **„Εὕρηκα!”** (*Eureka!*), co według tłumaczy znaczy „znalazłem”, a według
+      świadków raczej „dajcie mi ręcznik”.
+
+      Archimedes zanurza koronę w naczyniu z wodą. Korona ma masę $m = 1{,}93\ \text{kg}$,
+      a poziom wody podnosi się o objętość $V = 120\ \text{cm}^3$.
+
+      Gęstość złota: $\rho_{Au} = 19{,}3\ \tfrac{\text{g}}{\text{cm}^3}$.
+    parts:
+      - question: "Oblicz **gęstość korony**."
+        answer: { quantity: density, value: 16.0833, unit: g/cm3 }
+        points: 2
+        hint: |
+          $$\rho = \frac{m}{V}$$
+          Zamień kilogramy na gramy, bo objętość masz w $\text{cm}^3$.
+        solution: |
+          $$m = 1{,}93\ \text{kg} = 1930\ \text{g}$$
+          $$\rho = \frac{1930\ \text{g}}{120\ \text{cm}^3} \approx 16{,}08\ \tfrac{\text{g}}{\text{cm}^3}$$
+          To mniej niż $19{,}3\ \tfrac{\text{g}}{\text{cm}^3}$. Złotnik ma problem.
+      - question: "Jaką **objętość** miałaby korona o tej samej masie, gdyby była z czystego złota?"
+        answer: { quantity: volume, value: 100, unit: cm3 }
+        hint: |
+          $$V = \frac{m}{\rho}$$
+        solution: |
+          $$V = \frac{1930\ \text{g}}{19{,}3\ \tfrac{\text{g}}{\text{cm}^3}} = 100\ \text{cm}^3$$
+      - question: "O ile **więcej wody** (objętość) wypchnęła prawdziwa korona niż powinna?"
+        answer: { quantity: volume, value: 20, unit: cm3 }
+        solution: |
+          $$\Delta V = 120\ \text{cm}^3 - 100\ \text{cm}^3 = 20\ \text{cm}^3$$
+          Czyli $0{,}02\ \text{dm}^3$. Mało, ale wystarczy, żeby stracić głowę (dosłownie, to starożytność).
+    epilogue: |
+      Całą tę historię znamy z relacji **Witruwiusza**, spisanej jakieś 200 lat później,
+      więc może być równie prawdziwa jak „krótka przerwa na kawę”. Galileusz w traktacie
+      *La Bilancetta* (1586) stwierdził, że metoda z wylewaniem wody byłaby za mało dokładna,
+      i zaproponował wersję z wagą. Taką jak w następnym zadaniu.
+
+  - id: korona-silomierz
+    title: "Korona na siłomierzu (wersja Galileusza)"
+    tags: [ciężar, wyporność, przekształcenia]
+    lore: archimedes
+    bonus: 2
+    bonusReason: "Za Galileusza, który poprawiał Archimedesa 1800 lat po fakcie."
+    story: |
+      Galileusz uważa, że mierzenie wylanej wody to amatorszczyzna. Lepiej zważyć koronę
+      w powietrzu i w wodzie, a różnica powie wszystko, bo na zanurzone ciało działa
+      **siła wyporu**:
+
+      $$F_w = \rho_{cieczy} \cdot g \cdot V$$
+
+      Ta sama korona: siłomierz w powietrzu pokazuje $19{,}3\ \text{N}$, a jej objętość to
+      $0{,}12\ \text{dm}^3$. Woda: $\rho = 1000\ \tfrac{\text{kg}}{\text{m}^3}$, $g = 10\ \tfrac{\text{m}}{\text{s}^2}$.
+    parts:
+      - question: "Oblicz **siłę wyporu** działającą na całkowicie zanurzoną koronę."
+        answer: { quantity: force, value: 1.2, unit: N }
+        hint: "Zamień $\\text{dm}^3$ na $\\text{m}^3$. Jeden $\\text{dm}^3$ to $0{,}001\\ \\text{m}^3$."
+        solution: |
+          $$V = 0{,}12\ \text{dm}^3 = 0{,}00012\ \text{m}^3$$
+          $$F_w = 1000 \cdot 10 \cdot 0{,}00012 = 1{,}2\ \text{N}$$
+      - question: "Co pokaże **siłomierz**, gdy korona wisi zanurzona w wodzie?"
+        answer: { quantity: force, value: 18.1, unit: N }
+        solution: |
+          $$F = F_g - F_w = 19{,}3\ \text{N} - 1{,}2\ \text{N} = 18{,}1\ \text{N}$$
+      - question: "Jaka byłaby siła wyporu dla korony z **czystego złota** o tym samym ciężarze (objętość $100\\ \\text{cm}^3$)?"
+        answer: { quantity: force, value: 1.0, unit: N }
+        solution: |
+          $$F_w = 1000 \cdot 10 \cdot 0{,}0001 = 1\ \text{N}$$
+          Różnica $0{,}2\ \text{N}$ na porządnej wadze jest jak syrena alarmowa. Złotnik nie ma szans.
+    epilogue: |
+      Waga hydrostatyczna działa właśnie tak: porównujesz ciężar w powietrzu i w wodzie
+      i wychodzi ci gęstość bez rozpuszczania, piłowania i innych barbarzyństw.
+
+  - id: archimedes-wanna
+    title: "Ile wody wylał Archimedes?"
+    tags: [objętość, masa, wyporność]
+    lore: archimedes
+    bonus: 2
+    bonusReason: "Za mokrą podłogę i brak ręcznika."
+    story: |
+      Rekonstrukcja wydarzeń: Archimedes (masa $70\ \text{kg}$) wchodzi do wanny wypełnionej
+      **po same brzegi**. Zanurza się cały, razem z głową, bo geniusze nie robią rzeczy połowicznie.
+      Średnia gęstość jego ciała to $1{,}05\ \tfrac{\text{kg}}{\text{dm}^3}$.
+
+      Niewolnik odpowiedzialny za sprzątanie łaźni ma już złe przeczucia.
+    parts:
+      - question: "Jaka **objętość** wody wyleje się z wanny?"
+        answer: { quantity: volume, value: 66.6667, unit: dm3 }
+        hint: |
+          Wylewa się tyle wody, ile zajmuje zanurzone ciało.
+          $$V = \frac{m}{\rho}$$
+        solution: |
+          $$V = \frac{70\ \text{kg}}{1{,}05\ \tfrac{\text{kg}}{\text{dm}^3}} \approx 66{,}7\ \text{dm}^3$$
+      - question: "Jaka jest **masa** wylanej wody?"
+        answer: { quantity: mass, value: 66.6667, unit: kg }
+        solution: |
+          Woda ma $1\ \tfrac{\text{kg}}{\text{dm}^3}$, więc:
+          $$m = 1 \cdot 66{,}7 \approx 66{,}7\ \text{kg}$$
+      - question: "Jaka **siła wyporu** działa na całkowicie zanurzonego Archimedesa?"
+        answer: { quantity: force, value: 666.667, unit: N }
+        solution: |
+          $$F_w = m_{wody} \cdot g \approx 66{,}7 \cdot 10 \approx 667\ \text{N}$$
+          Jego ciężar to $700\ \text{N}$, więc bez ruszania rękami powoli idzie na dno. Klasyka geniuszy.
+    epilogue: |
+      Przy ręczniku chłonącym około $1{,}5\ \text{kg}$ wody potrzeba ich ponad 40.
+      Archimedes wybrał bieganie nago po Syrakuzach. Taniej.
+
+  - id: korona-stop
+    title: "Ile srebra dosypał złotnik? (dla ambitnych)"
+    tags: [masa, gęstość, przekształcenia]
+    lore: archimedes
+    bonus: 3
+    bonusReason: "Za doprowadzenie śledztwa do końca, czego Witruwiusz nie zrobił."
+    story: |
+      Wracamy do korony: $m = 1{,}93\ \text{kg}$, $V = 0{,}12\ \text{dm}^3$. Załóżmy, że to
+      stop złota ($19{,}3\ \tfrac{\text{g}}{\text{cm}^3}$) i srebra ($10{,}5\ \tfrac{\text{g}}{\text{cm}^3}$),
+      a objętości po prostu się sumują.
+
+      Król chce wiedzieć **ile dokładnie** srebra, żeby wiedzieć, ile ma złotnikowi potrącić.
+      Z wynagrodzenia albo z długości życia.
+    parts:
+      - question: "Oblicz **masę srebra** w koronie."
+        answer: { quantity: mass, value: 460.57, unit: g }
+        tolerance: 0.02
+        points: 3
+        hint: |
+          Dwie niewiadome, dwa równania:
+          $$m_{Au} + m_{Ag} = 1930\ \text{g}$$
+          $$\frac{m_{Au}}{19{,}3} + \frac{m_{Ag}}{10{,}5} = 120$$
+        solution: |
+          Podstaw $m_{Au} = 1930 - m_{Ag}$:
+          $$\frac{1930 - m_{Ag}}{19{,}3} + \frac{m_{Ag}}{10{,}5} = 120$$
+          $$100 + m_{Ag}\left(\frac{1}{10{,}5} - \frac{1}{19{,}3}\right) = 120$$
+          $$m_{Ag} = \frac{20}{0{,}043425} \approx 460{,}6\ \text{g}$$
+          Prawie jedna czwarta korony to srebro. Złotnik raczej nie dostanie premii.
+
+  # ───────────────────────────── ŚWIAT DYSKU ─────────────────────────────
+  - id: bagaz-drewno
+    title: "Bagaż z myślącej gruszy"
+    tags: [masa, ciężar]
+    lore: dysk
+    bonus: 2
+    bonusReason: "Za Bagaż, który przeżył więcej niż większość bohaterów."
+    story: |
+      **Bagaż** to kufer z drewna myślącej gruszy. Ma setki nóżek, biega za właścicielem
+      przez czas i przestrzeń, a ludzi, którzy mu podpadną, po prostu zjada. Rincewind,
+      najgorszy mag Niewidocznego Uniwersytetu, nie jest jego fanem, ale nikt go nie pytał o zdanie.
+
+      Załóżmy, że samo drewno Bagażu ma objętość $0{,}15\ \text{m}^3$, a myśląca grusza ma gęstość
+      $0{,}8\ \tfrac{\text{g}}{\text{cm}^3}$ (pomiar wykonano, zanim Bagaż zjadł naukowca).
+    parts:
+      - question: "Oblicz **masę** drewna Bagażu."
+        answer: { quantity: mass, value: 120, unit: kg }
+        hint: "$0{,}8\\ \\tfrac{\\text{g}}{\\text{cm}^3} = 800\\ \\tfrac{\\text{kg}}{\\text{m}^3}$"
+        solution: |
+          $$\rho = 0{,}8\ \tfrac{\text{g}}{\text{cm}^3} = 800\ \tfrac{\text{kg}}{\text{m}^3}$$
+          $$m = 800 \cdot 0{,}15 = 120\ \text{kg}$$
+      - question: "Jaki jest **ciężar** pustego Bagażu?"
+        answer: { quantity: force, value: 1200, unit: N }
+        solution: |
+          $$F_g = 120 \cdot 10 = 1200\ \text{N} = 1{,}2\ \text{kN}$$
+          Dobrze, że chodzi sam.
+
+  - id: bagaz-plywa
+    title: "Bagaż na Okrągłym Morzu"
+    tags: [gęstość, wyporność, objętość]
+    lore: dysk
+    bonus: 2
+    bonusReason: "Za Bagaż, który pływa lepiej niż Rincewind."
+    story: |
+      Statek z Rincewindem znów zatonął (statki z Rincewindem toną zawodowo). Bagaż, wypchany
+      bielizną maga, ma łączną masę $240\ \text{kg}$ i zewnętrzną objętość $0{,}3\ \text{m}^3$.
+      Wpada do wody o gęstości $1\ \tfrac{\text{kg}}{\text{dm}^3}$.
+    parts:
+      - question: "Oblicz **średnią gęstość** Bagażu."
+        answer: { quantity: density, value: 0.8, unit: g/cm3 }
+        solution: |
+          $$\rho = \frac{240\ \text{kg}}{0{,}3\ \text{m}^3} = 800\ \tfrac{\text{kg}}{\text{m}^3} = 0{,}8\ \tfrac{\text{g}}{\text{cm}^3}$$
+          Mniej niż woda, więc pływa.
+      - question: "Jaka **objętość** Bagażu jest zanurzona, gdy spokojnie pływa?"
+        answer: { quantity: volume, value: 0.24, unit: m3 }
+        hint: |
+          Ciało pływa, gdy siła wyporu równa się ciężarowi, czyli wypiera wodę o masie równej swojej masie.
+        solution: |
+          $$V_{zan} = \frac{m}{\rho_{wody}} = \frac{240\ \text{kg}}{1000\ \tfrac{\text{kg}}{\text{m}^3}} = 0{,}24\ \text{m}^3$$
+          Czyli $80\%$ Bagażu jest pod wodą. Z resztą $20\%$ wystaje zła wola.
+      - question: "Jaka **siła wyporu** działa na pływający Bagaż?"
+        answer: { quantity: force, value: 2400, unit: N }
+        solution: |
+          $$F_w = 1000 \cdot 10 \cdot 0{,}24 = 2400\ \text{N}$$
+          Dokładnie tyle, ile waży. Pływanie to nudna równowaga sił.
+
+  - id: rzeka-ankh
+    title: "Rzeka Ankh, po której da się chodzić"
+    tags: [masa, ciężar, wyporność, objętość]
+    lore: dysk
+    bonus: 2
+    bonusReason: "Za Ankh, jedyną rzekę, w której łatwiej się udusić niż utonąć."
+    story: |
+      Rzeka **Ankh** przepływa przez Ankh-Morpork i ma konsystencję, której nie powstydziłaby się
+      zupa grochowa po tygodniu. Mieszkańcy twierdzą, że po niej da się chodzić,
+      a niektórzy przestępcy rysują na niej kredą obrysy ciał.
+
+      Przyjmijmy gęstość wody z Ankh: $1{,}8\ \tfrac{\text{kg}}{\text{dm}^3}$.
+      Kapral **Nobby Nobbs** ze Straży Miejskiej zaczerpnął wiadro o pojemności $12\ \text{dm}^3$
+      jako „dowód rzeczowy”.
+    parts:
+      - question: "Jaka jest **masa** wody z Ankh w wiadrze?"
+        answer: { quantity: mass, value: 21.6, unit: kg }
+        solution: |
+          $$m = 1{,}8 \cdot 12 = 21{,}6\ \text{kg}$$
+      - question: "Ile **waży** (w niutonach) to wiadro z zawartością? Masę wiadra pomiń."
+        answer: { quantity: force, value: 216, unit: N }
+        solution: |
+          $$F_g = 21{,}6 \cdot 10 = 216\ \text{N}$$
+      - question: |
+          Nobby (masa $60\ \text{kg}$, objętość $60\ \text{dm}^3$, o ile to w ogóle człowiek)
+          wpada do Ankh. Jaka **objętość** jego ciała będzie zanurzona?
+        answer: { quantity: volume, value: 33.3333, unit: dm3 }
+        hint: "Pływa, więc wypiera ciecz o masie równej swojej masie. Ale cieczą jest Ankh, nie woda."
+        solution: |
+          $$V_{zan} = \frac{60\ \text{kg}}{1{,}8\ \tfrac{\text{kg}}{\text{dm}^3}} \approx 33{,}3\ \text{dm}^3$$
+          Nieco ponad połowa Nobby'ego. W wodzie byłby zanurzony w całości (jego gęstość to dokładnie $1\ \tfrac{\text{kg}}{\text{dm}^3}$).
+    epilogue: |
+      Nobby nosi przy sobie zaświadczenie, że jest człowiekiem. Podpisane przez Patrycjusza.
+      Fizyka nie ma w tej sprawie zdania.
+
+  - id: krasnoludzki-chleb
+    title: "Krasnoludzki chleb, broń ostatniej szansy"
+    tags: [gęstość, wyporność, ciężar, przekształcenia]
+    lore: dysk
+    bonus: 2
+    bonusReason: "Za jedyne pieczywo, które ma status broni obuchowej."
+    story: |
+      **Krasnoludzki chleb** nie czerstwieje, bo nie ma od czego. Krasnolud zabiera go
+      w podróż, żeby w chwilach głodu spojrzeć na niego i stwierdzić, że właściwie to
+      jeszcze nie jest tak głodny. W razie potrzeby można nim kogoś zabić.
+
+      Bochenek ma masę $4{,}5\ \text{kg}$ i objętość $1500\ \text{cm}^3$.
+    parts:
+      - question: "Oblicz **gęstość** chleba."
+        answer: { quantity: density, value: 3, unit: kg/dm3 }
+        solution: |
+          $$V = 1500\ \text{cm}^3 = 1{,}5\ \text{dm}^3$$
+          $$\rho = \frac{4{,}5\ \text{kg}}{1{,}5\ \text{dm}^3} = 3\ \tfrac{\text{kg}}{\text{dm}^3}$$
+          Gęstszy niż aluminium. Śmiało nazwijmy to kamieniem.
+      - question: "Krasnolud zanurza chleb w wodzie (bo może zmięknie). Jaka **siła wyporu** na niego działa?"
+        answer: { quantity: force, value: 15, unit: N }
+        solution: |
+          $$F_w = 1000 \cdot 10 \cdot 0{,}0015 = 15\ \text{N}$$
+      - question: "Co pokaże **siłomierz**, na którym chleb wisi w wodzie?"
+        answer: { quantity: force, value: 30, unit: N }
+        solution: |
+          $$F = 45\ \text{N} - 15\ \text{N} = 30\ \text{N}$$
+          Nie zmiękł. Nigdy nie mięknie.
+
+  - id: bibliotekarz
+    title: "Bibliotekarz i grimuar"
+    tags: [objętość, masa, ciężar, przekształcenia]
+    lore: dysk
+    bonus: 1
+    bonusReason: "Ook."
+    story: |
+      **Bibliotekarz** Niewidocznego Uniwersytetu to orangutan (wypadek magiczny, nie chce wracać).
+      Mówi wyłącznie „Ook”, a na słowo „małpa” reaguje w sposób, po którym trzeba wymieniać meble.
+
+      Właśnie ściąga z półki grimuar o wymiarach $25\ \text{cm} \times 20\ \text{cm} \times 10\ \text{cm}$.
+      Magiczny papier ma gęstość $0{,}9\ \tfrac{\text{g}}{\text{cm}^3}$.
+    parts:
+      - question: "Oblicz **objętość** księgi."
+        answer: { quantity: volume, value: 5, unit: dm3 }
+        solution: |
+          $$V = 25 \cdot 20 \cdot 10 = 5000\ \text{cm}^3 = 5\ \text{dm}^3$$
+      - question: "Oblicz **masę** księgi."
+        answer: { quantity: mass, value: 4.5, unit: kg }
+        solution: |
+          $$m = 0{,}9 \cdot 5000 = 4500\ \text{g} = 4{,}5\ \text{kg}$$
+      - question: "Ile **waży** księga?"
+        answer: { quantity: force, value: 45, unit: N }
+        solution: |
+          $$F_g = 4{,}5 \cdot 10 = 45\ \text{N}$$
+          Dla orangutana żaden problem. Dla studenta, który zapomniał oddać ją w terminie, potencjalnie śmiertelny.
+
+  - id: troll-detrytus
+    title: "Ile miejsca zajmuje troll?"
+    tags: [objętość, ciężar, przekształcenia]
+    lore: dysk
+    bonus: 1
+    bonusReason: "Za Detrytusa, który na zimnie robi się mądrzejszy."
+    story: |
+      **Detrytus** to troll ze Straży Miejskiej Ankh-Morpork. Trolle są z kamienia, a ich krzemowe
+      mózgi działają lepiej w niskiej temperaturze. Detrytus w chłodni potrafi liczyć
+      do więcej niż czterech.
+
+      Detrytus ma masę $520\ \text{kg}$, a jego „skała” ma gęstość $2{,}6\ \tfrac{\text{g}}{\text{cm}^3}$.
+    parts:
+      - question: "Jaka jest **objętość** Detrytusa?"
+        answer: { quantity: volume, value: 0.2, unit: m3 }
+        hint: "$2{,}6\\ \\tfrac{\\text{g}}{\\text{cm}^3} = 2600\\ \\tfrac{\\text{kg}}{\\text{m}^3}$"
+        solution: |
+          $$V = \frac{520\ \text{kg}}{2600\ \tfrac{\text{kg}}{\text{m}^3}} = 0{,}2\ \text{m}^3 = 200\ \text{dm}^3$$
+      - question: "Jaki jest **ciężar** Detrytusa?"
+        answer: { quantity: force, value: 5200, unit: N }
+        solution: |
+          $$F_g = 520 \cdot 10 = 5200\ \text{N} = 5{,}2\ \text{kN}$$
+          Podłogi w komisariacie są wzmacniane. Częściowo.
+
+  - id: dolar-ankh-morpork
+    title: "Dolar Ankh-Morpork, czyli Archimedes w wersji miejskiej"
+    tags: [gęstość, masa, przekształcenia]
+    lore: dysk
+    bonus: 2
+    bonusReason: "Za połączenie Archimedesa z Patrycjuszem Vetinarim."
+    story: |
+      Dolar Ankh-Morpork ma w sobie złoto. Teoretycznie. Na tej samej zasadzie,
+      na jakiej w Ankh jest woda.
+
+      Moneta ma masę $10\ \text{g}$ i objętość $0{,}8\ \text{cm}^3$.
+      Złoto ma gęstość $19{,}3\ \tfrac{\text{g}}{\text{cm}^3}$.
+    parts:
+      - question: "Oblicz **gęstość** dolara."
+        answer: { quantity: density, value: 12.5, unit: g/cm3 }
+        solution: |
+          $$\rho = \frac{10\ \text{g}}{0{,}8\ \text{cm}^3} = 12{,}5\ \tfrac{\text{g}}{\text{cm}^3}$$
+          Daleko do złota. Nie zdziwiło to nawet krasnoludów.
+      - question: "Jaką **masę** miałaby moneta tej samej objętości z czystego złota?"
+        answer: { quantity: mass, value: 15.44, unit: g }
+        solution: |
+          $$m = 19{,}3 \cdot 0{,}8 = 15{,}44\ \text{g}$$
+
+  - id: klepsydra-smierci
+    title: "KLEPSYDRA ŻYCIA"
+    tags: [masa, przekształcenia]
+    lore: dysk
+    bonus: 2
+    bonusReason: "ZA TO, ŻE NIE MA POŚPIECHU. JESZCZE."
+    story: |
+      **ŚMIERĆ** (mówi WERSALIKAMI, nie da się tego przeoczyć) trzyma w swojej
+      siedzibie klepsydry życia, po jednej dla każdego żywego istnienia.
+
+      Piasek w klepsydrach ma gęstość $1{,}6\ \tfrac{\text{g}}{\text{cm}^3}$. W górnej
+      części pewnej klepsydry zostało $150\ \text{cm}^3$ piasku, a na początku było $0{,}6\ \text{dm}^3$.
+
+      PROSZĘ SIĘ NIE DENERWOWAĆ. TO TYLKO ZADANIE Z FIZYKI.
+    parts:
+      - question: "Jaka jest **masa** piasku, który jeszcze został?"
+        answer: { quantity: mass, value: 240, unit: g }
+        solution: |
+          $$m = 1{,}6 \cdot 150 = 240\ \text{g}$$
+      - question: "Jaka **masa** piasku już się przesypała?"
+        answer: { quantity: mass, value: 720, unit: g }
+        solution: |
+          $$0{,}6\ \text{dm}^3 = 600\ \text{cm}^3$$
+          $$m = 1{,}6 \cdot (600 - 150) = 1{,}6 \cdot 450 = 720\ \text{g}$$
+          TRZY CZWARTE. NIE MA SIĘ CZYM PRZEJMOWAĆ. PRAWIE.
+    epilogue: |
+      Śmierć bardzo lubi koty i curry. Z fizyki szczególnie ceni nieuchronność.
+
+  # ─────────────────────────────── ŁÓDŹ ───────────────────────────────
+  - id: lodz-rybacka
+    title: "Łódź, ryby i granice optymizmu"
+    tags: [wyporność, łódź, masa, objętość, ciężar]
+    lore: zwykłe
+    bonus: 1
+    bonusReason: "Za zadanie, w którym można zatonąć z własnej winy."
+    story: |
+      Łódź rybacka ma masę $300\ \text{kg}$. Gdy zanurzy się aż po burty, wypiera
+      $1{,}2\ \text{m}^3$ wody. Jezioro jest słodkie: $\rho = 1000\ \tfrac{\text{kg}}{\text{m}^3}$.
+
+      Rybacy, jak to rybacy, chcą zabrać wszystko.
+    parts:
+      - question: "Jaka jest **maksymalna siła wyporu**, jaka może działać na łódź?"
+        answer: { quantity: force, value: 12000, unit: N }
+        solution: |
+          $$F_{w,max} = 1000 \cdot 10 \cdot 1{,}2 = 12\,000\ \text{N} = 12\ \text{kN}$$
+      - question: "Jaki **maksymalny ładunek** (masa) może zabrać łódź, zanim woda wleje się przez burty?"
+        answer: { quantity: mass, value: 900, unit: kg }
+        hint: "Wypór może utrzymać łącznie $1200\\ \\text{kg}$. Część z tego to sama łódź."
+        solution: |
+          $$m_{max} = \rho \cdot V = 1000 \cdot 1{,}2 = 1200\ \text{kg}$$
+          $$m_{ładunku} = 1200 - 300 = 900\ \text{kg}$$
+      - question: "Łódź wiezie $400\\ \\text{kg}$ (rybacy plus ryby). Jaka **objętość** kadłuba jest zanurzona?"
+        answer: { quantity: volume, value: 0.7, unit: m3 }
+        solution: |
+          $$V_{zan} = \frac{300 + 400}{1000} = 0{,}7\ \text{m}^3 = 700\ \text{dm}^3$$
+      - question: |
+          Ta sama łódź trafia na rzekę **Ankh** ($1{,}8\ \tfrac{\text{kg}}{\text{dm}^3}$).
+          Jaki teraz jest **maksymalny ładunek**?
+        answer: { quantity: mass, value: 1860, unit: kg }
+        points: 2
+        solution: |
+          $$m_{max} = 1800 \cdot 1{,}2 = 2160\ \text{kg}$$
+          $$m_{ładunku} = 2160 - 300 = 1860\ \text{kg}$$
+          W Ankh łódź unosi ponad dwa razy więcej. Pytanie, czy chcesz cokolwiek z tej rzeki wyławiać.
+
+  - id: gora-lodowa
+    title: "Kostka lodu dla Titanica"
+    tags: [objętość, wyporność, przekształcenia]
+    lore: zwykłe
+    story: |
+      Blok lodu ma masę $920\ \text{kg}$. Gęstość lodu: $0{,}92\ \tfrac{\text{g}}{\text{cm}^3}$.
+      Blok pływa w słodkiej wodzie, bo w morskiej byłoby za łatwo.
+    parts:
+      - question: "Jaka jest **objętość** bloku lodu?"
+        answer: { quantity: volume, value: 1, unit: m3 }
+        solution: |
+          $$V = \frac{920\ \text{kg}}{920\ \tfrac{\text{kg}}{\text{m}^3}} = 1\ \text{m}^3$$
+      - question: "Jaka **objętość** lodu wystaje **nad** wodę?"
+        answer: { quantity: volume, value: 80, unit: dm3 }
+        solution: |
+          $$V_{zan} = \frac{920}{1000} = 0{,}92\ \text{m}^3$$
+          $$V_{nad} = 1 - 0{,}92 = 0{,}08\ \text{m}^3 = 80\ \text{dm}^3$$
+          Widzisz $8\%$ problemu. Pozostałe $92\%$ czeka na kadłub.
+
+  # ─────────────────────────────── ZWYKŁE ───────────────────────────────
+  - id: sztabka-zlota
+    title: "Skok na bank: sztabka"
+    tags: [masa, przekształcenia]
+    lore: zwykłe
+    story: |
+      Złodziej planuje wynieść z sejfu sztabkę złota o objętości $0{,}5\ \text{dm}^3$.
+      Gęstość złota: $19{,}3\ \tfrac{\text{g}}{\text{cm}^3}$. W filmach wynoszą je po dziesięć pod pachą.
+    parts:
+      - question: "Oblicz **masę** sztabki."
+        answer: { quantity: mass, value: 9.65, unit: kg }
+        solution: |
+          $$V = 0{,}5\ \text{dm}^3 = 500\ \text{cm}^3$$
+          $$m = 19{,}3 \cdot 500 = 9650\ \text{g} = 9{,}65\ \text{kg}$$
+          Dziesięć takich pod pachą to prawie sto kilo. Hollywood kłamie.
+
+  - id: puszka
+    title: "Puszka po napoju"
+    tags: [objętość, przekształcenia]
+    lore: zwykłe
+    story: |
+      Pusta aluminiowa puszka ma masę $15\ \text{g}$. Aluminium ma gęstość $2{,}7\ \tfrac{\text{kg}}{\text{dm}^3}$.
+    parts:
+      - question: "Jaka jest **objętość** samego aluminium w puszce?"
+        answer: { quantity: volume, value: 5.5556, unit: cm3 }
+        solution: |
+          $$2{,}7\ \tfrac{\text{kg}}{\text{dm}^3} = 2{,}7\ \tfrac{\text{g}}{\text{cm}^3}$$
+          $$V = \frac{15}{2{,}7} \approx 5{,}56\ \text{cm}^3$$
+          Mniej niż łyżeczka. Reszta to powietrze i marketing.
+
+  - id: rtec
+    title: "Kilogram rtęci"
+    tags: [objętość, przekształcenia]
+    lore: zwykłe
+    story: |
+      Dziadek trzyma w szufladzie słoik z rtęcią „na wszelki wypadek”. Jest tam $1\ \text{kg}$ rtęci.
+      Gęstość rtęci: $13{,}6\ \tfrac{\text{g}}{\text{cm}^3}$. Nie, nie wolno jej dotykać.
+    parts:
+      - question: "Jaką **objętość** zajmuje rtęć?"
+        answer: { quantity: volume, value: 73.529, unit: cm3 }
+        solution: |
+          $$V = \frac{1000\ \text{g}}{13{,}6\ \tfrac{\text{g}}{\text{cm}^3}} \approx 73{,}5\ \text{cm}^3$$
+          Kilogram w objętości kieliszka. Dziadek ma ciekawsze hobby niż myślisz.
+
+  - id: powietrze-w-pokoju
+    title: "Ile waży powietrze w twoim pokoju?"
+    tags: [objętość, masa, ciężar]
+    lore: zwykłe
+    story: |
+      Pokój ma wymiary $5\ \text{m} \times 4\ \text{m} \times 2{,}5\ \text{m}$.
+      Gęstość powietrza: $1{,}2\ \tfrac{\text{kg}}{\text{m}^3}$. Tak, powietrze coś waży.
+    parts:
+      - question: "Oblicz **objętość** pokoju."
+        answer: { quantity: volume, value: 50, unit: m3 }
+        solution: |
+          $$V = 5 \cdot 4 \cdot 2{,}5 = 50\ \text{m}^3$$
+      - question: "Oblicz **masę** powietrza w pokoju."
+        answer: { quantity: mass, value: 60, unit: kg }
+        solution: |
+          $$m = 1{,}2 \cdot 50 = 60\ \text{kg}$$
+      - question: "Jaki jest **ciężar** tego powietrza?"
+        answer: { quantity: force, value: 600, unit: N }
+        solution: |
+          $$F_g = 60 \cdot 10 = 600\ \text{N}$$
+          Mniej więcej tyle, co dorosły człowiek. Z tą różnicą, że powietrze nie zostawia skarpetek.
+
+  - id: kamien
+    title: "Kamień z ogródka"
+    tags: [masa, ciężar, przekształcenia]
+    lore: zwykłe
+    story: |
+      Kamień ma objętość $4000\ \text{cm}^3$, a gęstość $2{,}5\ \tfrac{\text{kg}}{\text{dm}^3}$.
+      Sąsiad chce go przenieść gołymi rękami, bo „to tylko kamyczek”.
+    parts:
+      - question: "Oblicz **masę** kamienia."
+        answer: { quantity: mass, value: 10, unit: kg }
+        solution: |
+          $$V = 4000\ \text{cm}^3 = 4\ \text{dm}^3$$
+          $$m = 2{,}5 \cdot 4 = 10\ \text{kg}$$
+      - question: "Jaki jest **ciężar** kamienia?"
+        answer: { quantity: force, value: 100, unit: N }
+        solution: |
+          $$F_g = 10 \cdot 10 = 100\ \text{N}$$
+
+  - id: tajemniczy-metal
+    title: "Tajemniczy metal z piwnicy"
+    tags: [gęstość, masa, ciężar, przekształcenia]
+    lore: zwykłe
+    story: |
+      W piwnicy leży metalowy klocek. Siłomierz pokazuje $54\ \text{N}$, a z pomiaru linijką
+      wychodzi objętość $2\ \text{dm}^3$. Właściciel twierdzi, że to srebro.
+    parts:
+      - question: "Oblicz **masę** klocka."
+        answer: { quantity: mass, value: 5.4, unit: kg }
+        solution: |
+          $$m = \frac{F_g}{g} = \frac{54}{10} = 5{,}4\ \text{kg}$$
+      - question: "Oblicz **gęstość** klocka."
+        answer: { quantity: density, value: 2.7, unit: kg/dm3 }
+        solution: |
+          $$\rho = \frac{5{,}4\ \text{kg}}{2\ \text{dm}^3} = 2{,}7\ \tfrac{\text{kg}}{\text{dm}^3}$$
+          To aluminium. Srebro ma $10{,}5$. Właściciel ma pecha.
